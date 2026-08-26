@@ -2,9 +2,10 @@
 
 ## 1. System Overview & Executive Summary
 
-The **LinkedIn Job Application Bot** is an enterprise-grade automated job discovery, relevance evaluation, and dynamic application submission system built using modern runtime specifications: **Python 3.14 (Async Engine with Playwright & FastAPI)** and **Java 26 (Virtual Threads Engine with HttpClient HTTP/3 & Playwright Java)**.
+The **LinkedIn Job Application Bot** is an enterprise-grade automated job discovery, relevance evaluation, and dynamic application submission system built using modern runtime specifications: **Python 3.14 (Async Engine with Playwright & FastAPI)** and **Java 26 (Virtual Threads Engine with HttpClient HTTP/3 & Playwright Java)** under the **`com.cth`** (Central Techno Hub) package structure.
 
-The system targets tech roles in Singapore for **Ethan Cuevas**, executing search queries, analyzing unstructured Job Descriptions against verified candidate qualifications using LLM evaluation models, and executing multi-step form applications using browser automation with anti-detection and dynamic fallback answer generation.
+### Standalone & Zero-License Guarantee
+The system is architected to run **100% independently and without failure out-of-the-box**, requiring **zero paid API keys, subscriptions, or proprietary licenses**. When an external LLM API key is absent, the system seamlessly uses built-in open-source zero-cost heuristic rule engines to score job postings and dynamic screening responses without crashing or failing.
 
 ---
 
@@ -46,7 +47,7 @@ The system targets tech roles in Singapore for **Ethan Cuevas**, executing searc
 | - LinkedIn Endpoint Search    |                         | - Skills Extraction           |
 | - Terms: Software Engineer,   |                         | - Match Score (0-100%)        |
 |   Full Stack, Python, Backend |                         | - Filter: Age <=7d & Score>=75|
-|   AI Engineer, Systems Analyst|                         | - HTTP/3 Async LLM Call       |
+|   AI Engineer, Systems Analyst|                         | - Standalone Zero-License NLP |
 | - Filter: SG, Easy Apply      |                         |                               |
 +---------------+---------------+                         +---------------+---------------+
                 |                                                         |
@@ -83,7 +84,8 @@ The system targets tech roles in Singapore for **Ethan Cuevas**, executing searc
 - **Extraction Rules**:
   - Parse job element cards for `job_id`, `title`, `company`, `location`, `posted_date`, `job_url`, `description`.
 
-### Module 2: LLM Relevance & Scoring Engine
+### Module 2: LLM Relevance & Scoring Engine (Zero-License Enabled)
+- Standalone zero-cost heuristic evaluator fallback ensures candidate relevance calculation is computed locally without external paid cloud calls.
 - **Prompt Specification**:
   ```text
   System: You are an expert technical recruiter analyzing job postings for candidate Ethan Cuevas.
@@ -126,30 +128,3 @@ The system targets tech roles in Singapore for **Ethan Cuevas**, executing searc
 ### Module 5: Storage & Execution Audit Logging
 - System maintains real-time records for every encountered job listing.
 - Status values: `DISCOVERED`, `EVALUATED_PASS`, `EVALUATED_SKIP`, `APPLIED`, `FAILED`, `RETRY`.
-
----
-
-## 5. Sequence Diagram: Job Discovery to Application
-
-```
-Candidate Bot        LinkedIn API / Web           LLM Evaluator           Database Log
-     |                        |                         |                      |
-     |---- Search Jobs ------>|                         |                      |
-     |<--- Return Listings ---|                         |                      |
-     |                        |                         |                      |
-     |---- Check Age <=7d --->|                         |                      |
-     |     (Drop if >7d)      |                         |                      |
-     |                                                  |                      |
-     |------------------- Evaluate JD ----------------->|                      |
-     |<---------------- Score & JSON Response ----------|                      |
-     |                                                  |                      |
-     |---- If Score < 75% -> Log SKIPPED ------------------------------------->|
-     |                                                                         |
-     |---- If Score >= 75%: Launch Browser Dialog ---->|                       |
-     |---- Step 1: Personal Info (Email/Phone)        |                       |
-     |---- Step 2: Upload CV (Ethan_Cuevas...)        |                       |
-     |---- Step 3: Screening Q&A (Verified/Fallback)  |                       |
-     |---- Step 4: Submit Application                 |                       |
-     |                                                                         |
-     |------------------- Log APPLIED / FAILED ------------------------------->|
-```
