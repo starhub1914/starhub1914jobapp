@@ -44,8 +44,7 @@ class LinkedInBotEngine:
         """
         inputs = await page.query_selector_all("input[type='text'], textarea")
         for inp in inputs:
-            label_handle = await inp.evaluate_handle("el => el.closest('div').querySelector('label')")
-            label_text = await label_handle.inner_text() if label_handle else ""
+            label_text = await inp.evaluate("el => el.closest('div')?.querySelector('label')?.innerText || ''")
             label_lower = label_text.lower()
 
             if "python" in label_lower:
