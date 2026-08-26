@@ -11,6 +11,7 @@ public class JobApplication {
     private String title;
     private String company;
     private String location;
+    private String linkedinUrl;
     private LocalDateTime datePosted;
     private int postingAgeDays;
     private boolean easyApply = true;
@@ -30,6 +31,7 @@ public class JobApplication {
         this.title = title;
         this.company = company;
         this.location = location;
+        this.linkedinUrl = "https://www.linkedin.com/jobs/view/" + jobId;
         this.datePosted = LocalDateTime.now().minusDays(postingAgeDays);
         this.postingAgeDays = postingAgeDays;
         this.matchScore = matchScore;
@@ -49,6 +51,9 @@ public class JobApplication {
 
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
+
+    public String getLinkedinUrl() { return linkedinUrl; }
+    public void setLinkedinUrl(String linkedinUrl) { this.linkedinUrl = linkedinUrl; }
 
     public LocalDateTime getDatePosted() { return datePosted; }
     public void setDatePosted(LocalDateTime datePosted) { this.datePosted = datePosted; }

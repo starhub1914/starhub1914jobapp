@@ -1,11 +1,14 @@
 package com.cth.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Java 26 Native HttpClient (HTTP/3 enabled) LLM Relevance & Scoring Engine.
@@ -13,6 +16,7 @@ import java.util.List;
 public class LLMEvaluatorService {
 
     private final HttpClient httpClient;
+    private final ObjectMapper objectMapper;
     private static final String LLM_ENDPOINT = "https://api.openai.com/v1/chat/completions";
     private static final String API_KEY = System.getenv().getOrDefault("LLM_API_KEY", "mock-key");
 
@@ -27,13 +31,13 @@ public class LLMEvaluatorService {
 
     public LLMEvaluatorService() {
         this.httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_2) // Native HTTP/2 & HTTP/3 transport support
+                .version(HttpClient.Version.HTTP_2)
                 .connectTimeout(Duration.ofSeconds(10))
                 .build();
+        this.objectMapper = new ObjectMapper();
     }
 
     public EvaluationResult evaluateJob(String jobId, String jobTitle, String company, int postingAgeDays, String description) {
-        // Enforce Posting Age Constraint: age <= 7 days
         if (postingAgeDays > 7) {
             String reason = "Job posting age (" + postingAgeDays + " days) exceeds 7 days limit.";
             return new EvaluationResult(jobId, 0.0, false, reason, List.of(), "");
@@ -49,10 +53,12 @@ public class LLMEvaluatorService {
                     jobTitle, company, description
             );
 
-            String jsonPayload = String.format(
-                    "{\"model\": \"gpt-4o\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}], \"temperature\": 0.2}",
-                    prompt.replace("\"", "\\\"")
+            Map<String, Object> payloadMap = Map.of(
+                    "model", "gpt-4o",
+                    "messages", List.of(Map.of("role", "user", "content", prompt)),
+                    "temperature", 0.2
             );
+            String jsonPayload = objectMapper.writeValueAsString(payloadMap);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(LLM_ENDPOINT))

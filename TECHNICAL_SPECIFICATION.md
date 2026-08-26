@@ -4,10 +4,10 @@
 
 The **LinkedIn Job Application Bot** is an enterprise-grade automated job discovery, relevance evaluation, and dynamic application submission system built using modern runtime specifications: **Python 3.14 (Async Engine with Playwright & FastAPI)** and **Java 26 (Virtual Threads Engine with HttpClient HTTP/3 & Playwright Java)** under the **`com.cth`** (Central Techno Hub) package structure.
 
-### Dynamic Environment Variable Configuration & Standalone Guarantees
+### Dynamic Environment Variable Configuration & Dashboard Endpoints
 All candidate personal details, search filters, and execution parameters are **fully configurable via system environment variables**. When no environment variables are explicitly passed, the system defaults to Ethan Cuevas's profile.
 
-When external LLM API keys are absent, the system seamlessly uses built-in open-source zero-cost heuristic rule engines to score job postings and dynamic screening responses without crashing or failing.
+The system features dashboard reporting endpoints in both Python FastAPI (`/applications`) and Java 26 CLI/Service summary modes, listing all applied jobs, company names, application timestamps, evaluation match scores, and direct LinkedIn job URL links (`https://www.linkedin.com/jobs/view/{job_id}`).
 
 ---
 
@@ -66,16 +66,39 @@ The application reads candidate profile information directly from runtime enviro
                                                   |
                                                   v
                                 +-----------------------------------+
-                                | MODULE 5: AUDIT & STORAGE ENGINE  |
+                                | MODULE 5: AUDIT & DASHBOARD LAYER |
                                 | - PostgreSQL / SQL Server Schema  |
                                 | - Status: APPLIED, SKIPPED, FAILED|
-                                | - Retry Queues & Trace Logging    |
+                                | - Applied Jobs & Direct Links View|
                                 +-----------------------------------+
 ```
 
 ---
 
-## 4. Detailed Module Specifications
+## 4. Dashboard Endpoint Specifications
+
+### Applied Jobs Listing Endpoint (`GET /applications`)
+- **JSON Response Schema**:
+```json
+[
+  {
+    "job_id": "sg_tech_101",
+    "title": "Senior Python Backend Engineer",
+    "company": "Fintech Solutions SG",
+    "location": "Singapore",
+    "linkedin_url": "https://www.linkedin.com/jobs/view/sg_tech_101",
+    "posting_age_days": 2,
+    "match_score": 85.0,
+    "eval_status": "APPLIED",
+    "skip_reason": null,
+    "applied_at": "2026-02-26T04:50:00.000000"
+  }
+]
+```
+
+---
+
+## 5. Detailed Module Specifications
 
 ### Module 1: Job Search & Scraper Service
 - **Search Parameters**:

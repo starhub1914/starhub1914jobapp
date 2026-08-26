@@ -1,5 +1,6 @@
 package com.cth;
 
+import com.cth.model.JobApplication;
 import com.cth.service.LLMEvaluatorService;
 import com.cth.service.LinkedInBotService;
 
@@ -37,6 +38,14 @@ public class Application {
 
         botService.runConcurrentPipeline(mockJobs);
 
+        System.out.println("=========================================================================");
+        System.out.println("Applied Jobs Summary (Java 26 Dashboard View):");
+        System.out.println("-------------------------------------------------------------------------");
+        for (JobApplication app : botService.getAllApplications()) {
+            System.out.printf("• [%s] %s at %s | Match: %.1f%% | Date: %s | URL: %s%n",
+                    app.getEvalStatus(), app.getTitle(), app.getCompany(),
+                    app.getMatchScore(), app.getTimestamp(), app.getLinkedinUrl());
+        }
         System.out.println("=========================================================================");
         System.out.println("Java 26 Virtual Threads Pipeline Executed Successfully.");
         System.out.println("=========================================================================");
