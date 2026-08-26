@@ -10,6 +10,7 @@ from typing import List, Dict, Any
 
 from python.models import init_db, AsyncSessionLocal, JobApplicationModel
 from python.bot import LinkedInBotEngine
+from python.config import APP_NAME
 
 try:
     from fastapi import FastAPI, BackgroundTasks, HTTPException
@@ -28,7 +29,7 @@ if FASTAPI_AVAILABLE:
         yield
 
     app = FastAPI(
-        title="Ethan Cuevas - LinkedIn Application Bot Dashboard API",
+        title=APP_NAME,
         version="1.0.0",
         lifespan=lifespan
     )
@@ -48,6 +49,7 @@ if FASTAPI_AVAILABLE:
     @app.get("/health")
     async def health_check():
         return {
+            "application_name": APP_NAME,
             "status": "online",
             "engine": "Python 3.14 Async Free-Threading",
             "candidate": bot.candidate.name,
@@ -83,8 +85,8 @@ if FASTAPI_AVAILABLE:
 
 async def run_cli():
     print("=========================================================================")
-    print("Initializing Database & Executing Python 3.14 Job Application Bot Pipeline")
-    print("Candidate: Ethan Cuevas | Location: Singapore")
+    print(f"Initializing Database & Executing {APP_NAME} Pipeline")
+    print(f"Candidate: {bot.candidate.name} | Location: {bot.config.location}")
     print("=========================================================================")
     await init_db()
     await bot.run_pipeline(max_jobs=5)

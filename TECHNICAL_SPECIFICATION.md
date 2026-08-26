@@ -5,7 +5,7 @@
 The **LinkedIn Job Application Bot** is an enterprise-grade automated job discovery, relevance evaluation, and dynamic application submission system built using modern runtime specifications: **Python 3.14 (Async Engine with Playwright & FastAPI)** and **Java 26 (Virtual Threads Engine with HttpClient HTTP/3 & Playwright Java)** under the **`com.cth`** (Central Techno Hub) package structure.
 
 ### Dynamic Environment Variable Configuration & Dashboard Endpoints
-All candidate personal details, search filters, and execution parameters are **fully configurable via system environment variables**. When no environment variables are explicitly passed, the system defaults to Ethan Cuevas's profile.
+All candidate personal details, application metadata (`APP_NAME`), search filters, and execution parameters are **fully configurable via system environment variables**. When no environment variables are explicitly passed, the system defaults to Ethan Cuevas's profile.
 
 The system features dashboard reporting endpoints in both Python FastAPI (`/applications`) and Java 26 CLI/Service summary modes, listing all applied jobs, company names, application timestamps, evaluation match scores, and direct LinkedIn job URL links (`https://www.linkedin.com/jobs/view/{job_id}`).
 
@@ -13,10 +13,11 @@ The system features dashboard reporting endpoints in both Python FastAPI (`/appl
 
 ## 2. Configurable Candidate Profile & Environment Variables
 
-The application reads candidate profile information directly from runtime environment variables:
+The application reads candidate profile and application metadata directly from runtime environment variables:
 
 | Environment Variable | Description | Default Value |
 | :--- | :--- | :--- |
+| `APP_NAME` | Application Display Name | `Software Development Document Environment` |
 | `CANDIDATE_NAME` | Candidate Full Name | `Ethan Cuevas` |
 | `CANDIDATE_EMAIL` | Application Contact Email | `chael.cuevas@gmail.com` |
 | `CANDIDATE_PHONE` | Application Contact Phone | `8202 0452` |

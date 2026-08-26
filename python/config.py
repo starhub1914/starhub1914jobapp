@@ -1,12 +1,15 @@
 """
 Configuration parameters for LinkedIn Job Application Bot.
-Supports fully configurable candidate personal details via Environment Variables.
+Supports fully configurable candidate personal details & application metadata via Environment Variables.
 Python 3.14 Async Engine target settings.
 """
 
 import os
 from dataclasses import dataclass, field
 from typing import List
+
+# Configurable Application Name (Default: "Software Development Document Environment" / "My Job App")
+APP_NAME = os.getenv("APP_NAME", "Software Development Document Environment")
 
 
 @dataclass

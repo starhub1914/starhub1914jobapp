@@ -1,14 +1,11 @@
 package com.cth.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Java 26 Native HttpClient (HTTP/3 enabled) LLM Relevance & Scoring Engine.
@@ -16,7 +13,6 @@ import java.util.Map;
 public class LLMEvaluatorService {
 
     private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
     private static final String LLM_ENDPOINT = "https://api.openai.com/v1/chat/completions";
     private static final String API_KEY = System.getenv().getOrDefault("LLM_API_KEY", "mock-key");
 
@@ -34,7 +30,6 @@ public class LLMEvaluatorService {
                 .version(HttpClient.Version.HTTP_2)
                 .connectTimeout(Duration.ofSeconds(10))
                 .build();
-        this.objectMapper = new ObjectMapper();
     }
 
     public EvaluationResult evaluateJob(String jobId, String jobTitle, String company, int postingAgeDays, String description) {
@@ -48,17 +43,11 @@ public class LLMEvaluatorService {
         }
 
         try {
-            String prompt = String.format(
-                    "Evaluate candidate Ethan Cuevas for job %s at %s. Job Description: %s",
-                    jobTitle, company, description
+            String sanitizedPrompt = description.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r");
+            String jsonPayload = String.format(
+                    "{\"model\": \"gpt-4o\", \"messages\": [{\"role\": \"user\", \"content\": \"Evaluate %s at %s: %s\"}], \"temperature\": 0.2}",
+                    jobTitle, company, sanitizedPrompt
             );
-
-            Map<String, Object> payloadMap = Map.of(
-                    "model", "gpt-4o",
-                    "messages", List.of(Map.of("role", "user", "content", prompt)),
-                    "temperature", 0.2
-            );
-            String jsonPayload = objectMapper.writeValueAsString(payloadMap);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(LLM_ENDPOINT))

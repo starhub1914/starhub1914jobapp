@@ -12,9 +12,11 @@ import java.util.List;
  */
 public class Application {
 
+    private static final String APP_NAME = System.getenv().getOrDefault("APP_NAME", "Software Development Document Environment");
+
     public static void main(String[] args) {
         System.out.println("=========================================================================");
-        System.out.println("Starting Java 26 Virtual Threads LinkedIn Job Application Engine (com.cth)");
+        System.out.println("Starting Java 26 Virtual Threads Engine: " + APP_NAME);
         System.out.println("Candidate: Ethan Cuevas | Target Location: Singapore");
         System.out.println("=========================================================================");
 
@@ -39,7 +41,7 @@ public class Application {
         botService.runConcurrentPipeline(mockJobs);
 
         System.out.println("=========================================================================");
-        System.out.println("Applied Jobs Summary (Java 26 Dashboard View):");
+        System.out.println("Applied Jobs Summary (" + APP_NAME + " Dashboard View):");
         System.out.println("-------------------------------------------------------------------------");
         for (JobApplication app : botService.getAllApplications()) {
             System.out.printf("• [%s] %s at %s | Match: %.1f%% | Date: %s | URL: %s%n",
