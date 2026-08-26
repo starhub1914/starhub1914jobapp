@@ -2,12 +2,13 @@
 
 ## 1. System Overview & Executive Summary
 
-The **LinkedIn Job Application Bot** is an enterprise-grade automated job discovery, relevance evaluation, and dynamic application submission system built using modern runtime specifications: **Python 3.14 (Async Engine with Playwright & FastAPI)** and **Java 26 (Virtual Threads Engine with HttpClient HTTP/3 & Playwright Java)** under the **`com.cth`** (Central Techno Hub) package structure.
+The **LinkedIn Job Application Bot** (default application name: **`Software Development Document Environment`**, also configurable as **`My Job App`**) is an enterprise-grade automated job discovery, relevance evaluation, dynamic application submission, and real-time reporting system built using modern runtime specifications: **Python 3.14 (Async Engine with Playwright & FastAPI)** and **Java 26 (Virtual Threads Engine with HttpClient HTTP/3 & Playwright Java)** under the **`com.cth`** (Central Techno Hub) package structure.
 
-### Dynamic Environment Variable Configuration & Dashboard Endpoints
-All candidate personal details, application metadata (`APP_NAME`), search filters, and execution parameters are **fully configurable via system environment variables**. When no environment variables are explicitly passed, the system defaults to Ethan Cuevas's profile.
-
-The system features dashboard reporting endpoints in both Python FastAPI (`/applications`) and Java 26 CLI/Service summary modes, listing all applied jobs, company names, application timestamps, evaluation match scores, and direct LinkedIn job URL links (`https://www.linkedin.com/jobs/view/{job_id}`).
+### Environment Packaging & Service Lifecycle Scripts
+Cross-platform installation, compilation, launch, and termination scripts are provided for Linux/macOS and Windows environments:
+- **Build / Installation Scripts**: `build.sh` (Linux/macOS), `build.bat` (Windows)
+- **Service Launch Scripts**: `start.sh` (Linux/macOS), `start.bat` (Windows)
+- **Service Termination Scripts**: `stop.sh` (Linux/macOS), `stop.bat` (Windows)
 
 ---
 
